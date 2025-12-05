@@ -12,7 +12,7 @@ import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 
 
 // TODO: put your real client ID here
-const GOOGLE_CLIENT_ID = "610442221894-5e9j0je6cqei5nn7muao9m83hstvmfsv.apps.googleusercontent.com";
+const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
