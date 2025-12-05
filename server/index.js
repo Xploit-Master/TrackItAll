@@ -23,15 +23,17 @@ app.use("/api/users", userRoutes);
 if (process.env.NODE_ENV === "production") {
   const clientBuildPath = path.join(__dirname, "..", "client", "build");
 
-  // Serve static React files
+  // Serve static files from React build
   app.use(express.static(clientBuildPath));
 
-  // Catch-all for non-API routes (Express 5: avoid bare "*")
-  app.get("/*", (req, res) => {
+  // Catch-all AFTER API routes, with NO path string (avoids path-to-regexp issues)
+  app.use((req, res) => {
+    // If it's an unknown API route, return JSON 404
     if (req.path.startsWith("/api")) {
       return res.status(404).json({ message: "API route not found" });
     }
 
+    // For any non-API route, send back React index.html
     res.sendFile(path.join(clientBuildPath, "index.html"));
   });
 }
