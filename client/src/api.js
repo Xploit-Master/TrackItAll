@@ -1,8 +1,13 @@
 // client/src/api.js
 import axios from "axios";
 
+const baseURL =
+  process.env.NODE_ENV === "production"
+    ? "/api" // in Render: same origin (https://trackitall-t3x6.onrender.com/api)
+    : "http://localhost:5000/api"; // in dev: your local backend
+
 const api = axios.create({
-  baseURL: "http://localhost:5000/api", // change if needed
+  baseURL,
 });
 
 // attach token from localStorage
