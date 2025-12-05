@@ -20,21 +20,24 @@ app.use("/api/habits", habitRoutes);
 app.use("/api/users", userRoutes);
 
 // ---------- Serve Frontend in Production ----------
+// On Render, set NODE_ENV=production in env vars, or remove this if-block to always serve frontend.
 if (process.env.NODE_ENV === "production") {
-  // Path to client/build folder
   const clientBuildPath = path.join(__dirname, "..", "client", "build");
 
   // Serve static React files
   app.use(express.static(clientBuildPath));
 
-  // Handle all non-API routes by sending back React index.html
-  app.get("*", (req, res) => {
+  // Catch-all for non-API routes (Express 5: use named wildcard)
+  app.get("/{*splat}", (req, res) => {
+    // Keep API 404 behavior
     if (req.path.startsWith("/api")) {
       return res.status(404).json({ message: "API route not found" });
     }
+
     res.sendFile(path.join(clientBuildPath, "index.html"));
   });
 }
+
 
 // MongoDB connection
 const PORT = process.env.PORT || 5000;
